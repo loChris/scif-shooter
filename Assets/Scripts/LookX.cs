@@ -5,13 +5,7 @@ using UnityEngine;
 public class LookX : MonoBehaviour
 {
     [SerializeField] float _mouseXSensitivity = 1f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
     void Update()
     {
         float _mouseX = Input.GetAxis("Mouse X");
