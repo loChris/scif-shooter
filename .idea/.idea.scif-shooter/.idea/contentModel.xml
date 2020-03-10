@@ -141,6 +141,7 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
+          <e p="LookX.cs" t="Include" />
           <e p="Player.cs" t="Include" />
         </e>
       </e>
