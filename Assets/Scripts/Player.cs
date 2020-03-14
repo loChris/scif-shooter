@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private CharacterController _controller;
+    [SerializeField] GameObject _gunFire;
     [SerializeField] private float _speed = 3.5f;
     [SerializeField] private float _gravity = 9.81f;
     
@@ -21,6 +22,7 @@ public class Player : MonoBehaviour
         //if left click, cast ray from center point of main camera
         if (Input.GetMouseButton(0))
         {
+            _gunFire.SetActive(true);
             Ray rayOrigin = Camera.main.ViewportPointToRay(
                 new Vector3(
                     0.5f, 
@@ -33,6 +35,10 @@ public class Player : MonoBehaviour
             {
                 Debug.Log("raycast hit" + hitInfo.transform.name);
             }
+        }
+        else
+        {
+            _gunFire.SetActive(false);
         }
     }
 
