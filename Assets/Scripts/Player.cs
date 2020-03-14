@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public bool hasCoin = false;
     private int _currentAmmo;
     private bool _isReloading = false;
     private CharacterController _controller;
