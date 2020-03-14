@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private CharacterController _controller;
+    [SerializeField] GameObject _hitMarkerPrefab;
     [SerializeField] GameObject _gunFire;
     [SerializeField] private float _speed = 3.5f;
     [SerializeField] private float _gravity = 9.81f;
@@ -19,7 +20,11 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
-        //if left click, cast ray from center point of main camera
+        Shoot();
+    }
+
+    void Shoot()
+    {
         if (Input.GetMouseButton(0))
         {
             _gunFire.SetActive(true);
@@ -28,12 +33,14 @@ public class Player : MonoBehaviour
                     0.5f, 
                     0.5f, 
                     0
-                    )
-                );
+                )
+            );
             RaycastHit hitInfo;
             if (Physics.Raycast(rayOrigin, out hitInfo))
             {
                 Debug.Log("raycast hit" + hitInfo.transform.name);
+                GameObject hitMarker = Instantiate(_hitMarkerPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(hitMarker, .1f);
             }
         }
         else
@@ -41,11 +48,7 @@ public class Player : MonoBehaviour
             _gunFire.SetActive(false);
         }
     }
-
-    void GetGameComponents()
-    {
-        _controller = GetComponent<CharacterController>();
-    }
+    
     void CalculateMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -57,5 +60,10 @@ public class Player : MonoBehaviour
         velocity = transform.transform.TransformDirection(velocity);
         
         _controller.Move(velocity * Time.deltaTime);
+    }
+
+    void GetGameComponents()
+    {
+        _controller = GetComponent<CharacterController>();
     }
 }
