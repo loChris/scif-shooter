@@ -335,6 +335,7 @@ MonoBehaviour:
   _gunFire: {fileID: 150351878}
   _speed: 3.5
   _gravity: 9.81
+  _maxAmmo: 200
 --- !u!114 &80539580
 MonoBehaviour:
   m_ObjectHideFlags: 0

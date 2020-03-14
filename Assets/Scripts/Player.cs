@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private int _currentAmmo;
+    private bool _isReloading = false;
     private CharacterController _controller;
     [SerializeField] AudioSource _gunFireSound;
     [SerializeField] GameObject _hitMarkerPrefab;
     [SerializeField] GameObject _gunFire;
+    [SerializeField] private float _reloadTime = 2f;
     [SerializeField] private float _speed = 3.5f;
     [SerializeField] private float _gravity = 9.81f;
+    [SerializeField] private int _maxAmmo = 200;
     
     // Start is called before the first frame update
     void Start()
     {
         GetGameComponents();
+        _currentAmmo = _maxAmmo;
     }
 
     // Update is called once per frame
@@ -22,30 +27,33 @@ public class Player : MonoBehaviour
     {
         CalculateMovement();
         Shoot();
+        ReloadWeapon();
     }
 
     void Shoot()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && _currentAmmo > 0)
         {
             _gunFire.SetActive(true);
-            
-            if (_gunFireSound.isPlaying == false) _gunFireSound.Play();
-            
-            Ray rayOrigin = Camera.main.ViewportPointToRay(
-                new Vector3(
-                    0.5f, 
-                    0.5f, 
-                    0
-                )
-            );
-            RaycastHit hitInfo;
-            if (Physics.Raycast(rayOrigin, out hitInfo))
-            {
-                Debug.Log("raycast hit" + hitInfo.transform.name);
-                GameObject hitMarker = Instantiate(_hitMarkerPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-                Destroy(hitMarker, .1f);
-            }
+
+                if (_gunFireSound.isPlaying == false) _gunFireSound.Play();
+
+                _currentAmmo--;
+                Ray rayOrigin = Camera.main.ViewportPointToRay(
+                    new Vector3(
+                        0.5f,
+                        0.5f,
+                        0
+                    )
+                );
+                RaycastHit hitInfo;
+                if (Physics.Raycast(rayOrigin, out hitInfo))
+                {
+                    Debug.Log("raycast hit" + hitInfo.transform.name);
+                    GameObject hitMarker = Instantiate(_hitMarkerPrefab, hitInfo.point,
+                        Quaternion.LookRotation(hitInfo.normal));
+                    Destroy(hitMarker, .1f);
+                }
         }
         else
         {
@@ -65,6 +73,22 @@ public class Player : MonoBehaviour
         velocity = transform.transform.TransformDirection(velocity);
         
         _controller.Move(velocity * Time.deltaTime);
+    }
+
+    IEnumerator ReloadWeaponCoroutine()
+    {
+        yield return new WaitForSeconds(_reloadTime);
+        _currentAmmo = _maxAmmo;
+        _isReloading = false;
+    }
+
+    void ReloadWeapon()
+    {
+        if (Input.GetKeyDown(KeyCode.R) && _isReloading == false)
+        {
+            _isReloading = true;
+            StartCoroutine(ReloadWeaponCoroutine());
+        }
     }
 
     void GetGameComponents()
