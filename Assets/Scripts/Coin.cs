@@ -19,7 +19,7 @@ public class Coin : MonoBehaviour
                 UIManager uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
                 if (uiManager != null)
                 {
-                    uiManager.UpdateInventory();
+                    uiManager.AddCoinToInventory();
                 }
                 Destroy(this.gameObject);
             }

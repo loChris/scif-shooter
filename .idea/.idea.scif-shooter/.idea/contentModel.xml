@@ -146,6 +146,7 @@
           <e p="LookX.cs" t="Include" />
           <e p="LookY.cs" t="Include" />
           <e p="Player.cs" t="Include" />
+          <e p="SharkMan.cs" t="Include" />
           <e p="UIManager.cs" t="Include" />
         </e>
       </e>

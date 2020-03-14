@@ -19,8 +19,13 @@ public class UIManager : MonoBehaviour
         _ammoText.text = "Ammo: " + ammoCount;
     }
 
-    public void UpdateInventory()
+    public void AddCoinToInventory()
     {
         _coinImage.gameObject.SetActive(true);
+    }
+
+    public void RemoveCoinFromInventory()
+    {
+        _coinImage.gameObject.SetActive(false);
     }
 }

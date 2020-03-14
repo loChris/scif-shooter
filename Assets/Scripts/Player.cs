@@ -8,9 +8,10 @@ public class Player : MonoBehaviour
     private int _currentAmmo;
     private bool _isReloading = false;
     private CharacterController _controller;
-    [SerializeField] AudioSource _gunFireSound;
-    [SerializeField] GameObject _hitMarkerPrefab;
-    [SerializeField] GameObject _gunFire;
+    [SerializeField] private AudioSource _gunFireSound;
+    [SerializeField] private GameObject _hitMarkerPrefab;
+    [SerializeField] private GameObject _gunFire;
+    [SerializeField] private GameObject _weapon;
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private float _reloadTime = 2f;
     [SerializeField] private float _speed = 3.5f;
@@ -96,6 +97,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void EnableWeapon()
+    {
+        _weapon.SetActive(true);    
+    }
+    
     void GetGameComponents()
     {
         _controller = GetComponent<CharacterController>();
