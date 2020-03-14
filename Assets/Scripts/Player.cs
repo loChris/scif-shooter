@@ -15,7 +15,26 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() => CalculateMovement();
+    void Update()
+    {
+        CalculateMovement();
+        //if left click, cast ray from center point of main camera
+        if (Input.GetMouseButton(0))
+        {
+            Ray rayOrigin = Camera.main.ViewportPointToRay(
+                new Vector3(
+                    0.5f, 
+                    0.5f, 
+                    0
+                    )
+                );
+            RaycastHit hitInfo;
+            if (Physics.Raycast(rayOrigin, out hitInfo))
+            {
+                Debug.Log("raycast hit" + hitInfo.transform.name);
+            }
+        }
+    }
 
     void GetGameComponents()
     {
