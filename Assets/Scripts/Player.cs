@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private CharacterController _controller;
+    [SerializeField] AudioSource _gunFireSound;
     [SerializeField] GameObject _hitMarkerPrefab;
     [SerializeField] GameObject _gunFire;
     [SerializeField] private float _speed = 3.5f;
@@ -28,6 +29,9 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             _gunFire.SetActive(true);
+            
+            if (_gunFireSound.isPlaying == false) _gunFireSound.Play();
+            
             Ray rayOrigin = Camera.main.ViewportPointToRay(
                 new Vector3(
                     0.5f, 
@@ -46,6 +50,7 @@ public class Player : MonoBehaviour
         else
         {
             _gunFire.SetActive(false);
+            _gunFireSound.Stop();
         }
     }
     
@@ -65,5 +70,6 @@ public class Player : MonoBehaviour
     void GetGameComponents()
     {
         _controller = GetComponent<CharacterController>();
+        _gunFireSound = GetComponent<AudioSource>();
     }
 }
