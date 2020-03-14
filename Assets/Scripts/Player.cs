@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
 
     void Shoot()
     {
-        if (Input.GetMouseButton(0) && _currentAmmo > 0)
+        if (Input.GetMouseButton(0) && _currentAmmo > 0 && _isReloading == false)
         {
             _gunFire.SetActive(true);
 
