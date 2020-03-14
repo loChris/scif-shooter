@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] AudioSource _gunFireSound;
     [SerializeField] GameObject _hitMarkerPrefab;
     [SerializeField] GameObject _gunFire;
+    [SerializeField] private UIManager _uiManager;
     [SerializeField] private float _reloadTime = 2f;
     [SerializeField] private float _speed = 3.5f;
     [SerializeField] private float _gravity = 9.81f;
@@ -20,6 +21,7 @@ public class Player : MonoBehaviour
     {
         GetGameComponents();
         _currentAmmo = _maxAmmo;
+        _uiManager.UpdateAmmo(_currentAmmo);
     }
 
     // Update is called once per frame
@@ -39,6 +41,7 @@ public class Player : MonoBehaviour
                 if (_gunFireSound.isPlaying == false) _gunFireSound.Play();
 
                 _currentAmmo--;
+                _uiManager.UpdateAmmo(_currentAmmo);
                 Ray rayOrigin = Camera.main.ViewportPointToRay(
                     new Vector3(
                         0.5f,
@@ -79,6 +82,7 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(_reloadTime);
         _currentAmmo = _maxAmmo;
+        _uiManager.UpdateAmmo(_currentAmmo);
         _isReloading = false;
     }
 
@@ -95,5 +99,6 @@ public class Player : MonoBehaviour
     {
         _controller = GetComponent<CharacterController>();
         _gunFireSound = GetComponent<AudioSource>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 }
