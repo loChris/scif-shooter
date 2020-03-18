@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     public bool hasCoin = false;
     private int _currentAmmo;
     private bool _isReloading = false;
+    private bool _hasWeapon = false;
     private CharacterController _controller;
     [SerializeField] private AudioSource _gunFireSound;
     [SerializeField] private GameObject _hitMarkerPrefab;
@@ -30,7 +31,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
-        Shoot();
+        if (_hasWeapon) Shoot();
         ReloadWeapon();
     }
 
@@ -39,26 +40,36 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButton(0) && _currentAmmo > 0 && _isReloading == false)
         {
             _gunFire.SetActive(true);
-
-                if (_gunFireSound.isPlaying == false) _gunFireSound.Play();
-
-                _currentAmmo--;
-                _uiManager.UpdateAmmo(_currentAmmo);
-                Ray rayOrigin = Camera.main.ViewportPointToRay(
-                    new Vector3(
-                        0.5f,
-                        0.5f,
-                        0
+            
+            if (_gunFireSound.isPlaying == false) _gunFireSound.Play();
+            
+            _currentAmmo--;
+            _uiManager.UpdateAmmo(_currentAmmo); 
+            Ray rayOrigin = Camera.main.ViewportPointToRay(
+                new Vector3(
+                    0.5f,
+                    0.5f,
+                    0
                     )
                 );
-                RaycastHit hitInfo;
-                if (Physics.Raycast(rayOrigin, out hitInfo))
-                {
-                    Debug.Log("raycast hit" + hitInfo.transform.name);
-                    GameObject hitMarker = Instantiate(_hitMarkerPrefab, hitInfo.point,
-                        Quaternion.LookRotation(hitInfo.normal));
-                    Destroy(hitMarker, .1f);
-                }
+            
+            RaycastHit hitInfo;
+            if (Physics.Raycast(rayOrigin, out hitInfo))
+            { 
+                Debug.Log("raycast hit" + hitInfo.transform.name); 
+                
+                GameObject hitMarker = Instantiate(
+                    _hitMarkerPrefab,
+                    hitInfo.point, 
+                    Quaternion.LookRotation(hitInfo.normal)
+                    );
+                    
+                Destroy(hitMarker, .1f);
+            }
+            
+            Destructable crate = hitInfo.transform.GetComponent<Destructable>();
+            
+            if (crate != null) crate.DestroyCrate();
         }
         else
         {
@@ -99,7 +110,8 @@ public class Player : MonoBehaviour
 
     public void EnableWeapon()
     {
-        _weapon.SetActive(true);    
+        _weapon.SetActive(true);
+        _hasWeapon = true;
     }
     
     void GetGameComponents()
